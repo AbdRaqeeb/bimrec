@@ -136,6 +136,15 @@ export class HospitalService {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         { model: Lga },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { model: Specialty },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { model: Doctor },
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        { model: Appointment },
       ],
     });
   }
