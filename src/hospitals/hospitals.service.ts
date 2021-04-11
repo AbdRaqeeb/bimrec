@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as cryptoRandomString from 'crypto-random-string';
-import { Sequelize } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import { Hospital } from './models/hospital.model';
 import { HospitalDoctor } from './models/hospital-doctor.model';
 import { UpdateAfterVerificationArg } from './dto/args/updateAfterVerification.dto';
@@ -20,9 +20,7 @@ export class HospitalService {
     private hospitalModel: typeof Hospital,
     @InjectModel(HospitalDoctor)
     private readonly hospitalDoctorModel: typeof HospitalDoctor,
-    private sequelize: Sequelize,
-  ) {
-  }
+  ) {}
 
   // create hospital
 
@@ -125,7 +123,6 @@ export class HospitalService {
   }
 
   async searchHospital(name: string): Promise<Hospital[]> {
-    const { Op } = this.sequelize;
     return this.hospitalModel.findAll({
       where: {
         name: {
