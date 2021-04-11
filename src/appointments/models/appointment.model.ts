@@ -52,10 +52,10 @@ export class Appointment extends Model<Appointment> {
   patientId: string;
 
   @Column(DataType.STRING)
-  startTime: STRING;
+  startTime: string;
 
   @Column(DataType.STRING)
-  endTime: STRING;
+  endTime: string;
 
   @Column(DataType.DATE)
   date: Date;
