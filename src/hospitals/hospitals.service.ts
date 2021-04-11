@@ -126,7 +126,7 @@ export class HospitalService {
     return this.hospitalModel.findAll({
       where: {
         name: {
-          [Op.iLike]: `%${name}`,
+          [Op.iLike]: `%${name}%`,
         },
       },
       include: [
