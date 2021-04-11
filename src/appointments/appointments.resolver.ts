@@ -34,7 +34,9 @@ export class AppointmentsResolver {
   }
 
   @Query(() => [AppointmentDTO], { name: 'getHospitalAppointments' })
-  async getHospitalAppointments(hospitalId: string): Promise<AppointmentDTO[]> {
+  async getHospitalAppointments(
+    @Args('hospitalId') hospitalId: string,
+  ): Promise<AppointmentDTO[]> {
     return this.appointmentsService.getHospitalAppointments(hospitalId);
   }
 
