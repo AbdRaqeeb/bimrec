@@ -1,0 +1,462 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type StateDTO {
+  stateId: Int!
+  name: String!
+  patients: [PatientDTO]!
+  lgas: [LgaDTO]!
+  doctors: [DoctorDTO]!
+}
+
+type SpecialtyDTO {
+  specialtyId: ID!
+  name: String!
+  doctors: [DoctorDTO]!
+  hospitals: [HospitalDTO]!
+}
+
+type HospitalWalletDTO {
+  walletId: ID!
+  balance: Float!
+  hospital: HospitalDTO
+}
+
+type AppointmentTypeDTO {
+  appTypeId: ID!
+  name: String!
+  choice: String
+}
+
+type AppointmentDTO {
+  appointmentId: ID!
+  hospital: HospitalDTO
+  doctor: DoctorDTO
+  patient: PatientDTO
+  startTime: DateTime
+  endTime: DateTime
+  patientFinish: Boolean
+  doctorFinish: Boolean
+  description: String
+  patientNotificationTime: DateTime
+  doctorNotificationTime: DateTime
+  type: AppointmentTypeDTO
+  link: String
+  address: String
+  status: String!
+  payment: String!
+  price: Float!
+  isPaid: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type HospitalDTO {
+  hospitalId: String!
+  name: String
+  email: String
+  emailVerified: Boolean
+  phoneNumber: String
+  ward: String
+  facilityCode: String
+  facilityLevel: String
+  ownership: String
+  streetAndNumber: String
+  registrationNumber: String
+  facebook: String
+  image: String
+  twitter: String
+  instagram: String
+  downVotes: Float
+  upVotes: Float
+  star: Float
+  verified: Boolean
+  flag: Boolean
+  slug: String
+  role: String
+  state: StateDTO!
+  lga: LgaDTO!
+  doctors: [DoctorDTO]!
+  specialties: [SpecialtyDTO]!
+  wallet: HospitalWalletDTO
+  appointments: [AppointmentDTO!]
+}
+
+type DoctorDTO {
+  doctorId: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  image: String!
+  twitter: String!
+  instagram: String!
+  facebook: String!
+  status: String!
+  title: String
+  phoneNumber: String
+  slug: String
+  registrationNumber: String
+  role: String!
+  hospitals: [HospitalDTO]!
+  lga: LgaDTO!
+  state: StateDTO!
+  specialties: [SpecialtyDTO]!
+}
+
+type LgaDTO {
+  lgaId: Int!
+  name: String!
+  patients: [PatientDTO]!
+  doctors: [DoctorDTO]!
+}
+
+type NextOfKinDTO {
+  nextOfKinId: ID!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String!
+  relationship: String!
+  patient: PatientDTO!
+}
+
+type ECardDTO {
+  eCardId: String!
+  patientSlug: String!
+  bloodGroup: String
+  genotype: String
+  weight: Float
+  height: Float
+  bpSystolic: Float
+  bpDiastolic: Float
+  nokName: String
+  nokNumber: String
+  patient: PatientDTO
+  kin: NextOfKinDTO
+}
+
+type PatientDTO {
+  patientId: String!
+  firstName: String
+  lastName: String
+  email: String!
+  dob: DateTime
+  gender: String
+  streetAndNumber: String
+  identityNumber: String
+  twitter: String
+  facebook: String
+  instagram: String
+  image: String
+  slug: String
+  role: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  lga: LgaDTO
+  nok: NextOfKinDTO
+  state: StateDTO
+  eCard: ECardDTO
+}
+
+type WalletLogTypeDTO {
+  walletLogTypeId: String!
+  description: String!
+  walletLogs: [WalletLogDTO!]!
+}
+
+type TransactionTypeDTO {
+  trxTypeId: String!
+  description: String!
+  transactions: [TransactionDTO!]!
+}
+
+type TransactionResultDTO {
+  trxResultId: ID!
+  status: String!
+  trxRef: String!
+  flwRef: String!
+  amount: Float!
+  chargedAmount: Float!
+  currency: String!
+  processorResponse: String!
+  paymentType: String!
+  hospitalId: String!
+  hospitalName: String!
+  patientId: String!
+  patientName: String!
+  transaction: TransactionDTO!
+}
+
+type TransactionDTO {
+  trxId: ID!
+  extTrxRef: String
+  amount: Float!
+  status: String!
+  patient: PatientDTO
+  appointment: AppointmentDTO
+  hospital: HospitalDTO
+  transactionType: TransactionTypeDTO!
+  transactionResult: TransactionResultDTO
+  walletLog: WalletLogDTO
+}
+
+type WalletLogDTO {
+  walletLogId: ID!
+  balanceBefore: Float!
+  balanceAfter: Float!
+  amount: Float!
+  remarks: String
+  walletLogType: WalletLogTypeDTO!
+  transaction: TransactionDTO!
+  wallet: HospitalWalletDTO!
+}
+
+type UserToken {
+  token: String!
+  patient: PatientDTO!
+}
+
+type HospitalToken {
+  token: String!
+  hospital: HospitalDTO!
+}
+
+type DoctorToken {
+  token: String!
+  doctor: DoctorDTO!
+}
+
+type BiometricResult {
+  percentageMatch: Float!
+  patientId: String!
+  eCard: ECardDTO!
+  patient: PatientDTO!
+}
+
+type EmailNotificationDTO {
+  message: String!
+  success: Boolean!
+  validatedEmail: Boolean
+}
+
+type Query {
+  getLoggedInPatient: PatientDTO!
+  eCardById: ECardDTO!
+  eCardBySlug(patientSlug: String!): ECardDTO!
+  getPatientNextOfKin: NextOfKinDTO!
+  getECard: ECardDTO!
+  getNextOfkin: NextOfKinDTO!
+  getStates: [StateDTO!]!
+  getStateByName(name: String!): StateDTO!
+  getStateById(name: Float!): StateDTO!
+  lgas: [LgaDTO!]!
+  currentPatient: PatientDTO!
+  currentDoctor: DoctorDTO!
+  getHospitalById(hospitalId: String!): HospitalDTO!
+  searchHospitalByName(name: String!): HospitalDTO!
+  filterHospitalByName(name: String!): [HospitalDTO!]!
+  getHospitals: [HospitalDTO!]!
+  currentHospital: HospitalDTO!
+  getWalletBalance: HospitalWalletDTO!
+  getWalletLog(walletLogId: String!): WalletLogDTO!
+  getWalletLogTypes: [WalletLogTypeDTO!]!
+  getWalletLogType(walletLogTypeId: String!): WalletLogTypeDTO!
+  getSpecialties: [SpecialtyDTO!]!
+  getSpecialtyByName(name: String!): SpecialtyDTO!
+  getTransactionByExtTrxRef(extTrxRef: String!): TransactionDTO!
+  getTransactionByTrxId(trxId: String!): TransactionDTO!
+  getTransactionResultByTrxId(trxId: String!): TransactionResultDTO!
+  getTransactionType: [TransactionTypeDTO!]!
+  getOneAppointment: AppointmentDTO!
+  getAllAppointments: [AppointmentDTO!]!
+  getHospitalAppointments: [AppointmentDTO!]!
+  hospitalGetMyAppointments: [AppointmentDTO!]!
+  getDoctorAppointments: [AppointmentDTO!]!
+  doctorGetMyAppointments: [AppointmentDTO!]!
+  getPatientAppointments: [AppointmentDTO!]!
+  patientGetMyAppointments: [AppointmentDTO!]!
+}
+
+type Mutation {
+  updatePatient(nok: NextOfKinInput, patient: UpdatePatientInput!): PatientDTO!
+  createECard(input: ECardInput!): ECardDTO!
+  uploadImage(patientId: String!, image: Upload!): Boolean!
+  dataByBiometric(image: Upload!): [BiometricResult!]!
+  loginPatient(token: String!): UserToken!
+  registerPatient(token: String!): UserToken!
+  loginHospital(token: String!): HospitalToken!
+  registerHospital(token: String!): HospitalToken!
+  registerDoctor(token: String!): DoctorToken!
+  loginDoctor(token: String!): DoctorToken!
+  updateHospital(input: UpdateHospitalInput!): HospitalDTO!
+  addDoctorToHospital(doctorId: String!): HospitalDTO!
+  removeDoctorFromHospital(doctorId: String!): HospitalDTO!
+  updateHospitalAfterVerification(verified: Boolean!, input: UpdateAfterVerificationArg!, hospitalId: String!): HospitalDTO!
+  updateDoctor(input: UpdateDoctorInput!): DoctorDTO!
+  doctorRequestToJoinHospital(hospitalId: String!): DoctorDTO!
+  doctorCancelRequestToJoinHospital(hospitalId: String!): DoctorDTO!
+  addWalletLog(input: CreateWalletLog!): WalletLogDTO!
+  updateWalletLog(input: UpdateWalletLog!, walletLogId: String!): WalletLogDTO!
+  addWalletLogType(description: String!, walletLogTypeId: String!): WalletLogTypeDTO!
+  updateWalletLogType(description: String!, walletLogTypeId: String!): WalletLogTypeDTO!
+  createSpecialty(name: String!): SpecialtyDTO!
+  updateSpecialty(input: UpdateSpecialtyInput!): SpecialtyDTO!
+  addSpecialtyToDoctor(specialtyId: String!): SpecialtyDTO!
+  addSpecialtyToHospital(specialtyId: String!): SpecialtyDTO!
+  JoinEmailList(name: String!, userEmail: String!, mailingList: String!): EmailNotificationDTO!
+  ValidateEmail(email: String!): EmailNotificationDTO!
+  SendMailToUser: EmailNotificationDTO!
+  createTransaction(trx: UpdateTransactionInput!, trxId: String!): TransactionDTO!
+  addTransactionResult(trx: CreateTransactionResult!): TransactionResultDTO!
+  updateTransactionResult(trx: CreateTransactionResult!, trxId: String!): TransactionResultDTO!
+  addTransactionType(description: String!, trxTypeId: String!): TransactionTypeDTO!
+  updateTransactionType(description: String!, trxTypeId: String!): TransactionTypeDTO!
+  createAppointment(input: AppointmentInput!): AppointmentDTO!
+  bookAppointmentBySelf(input: BookAppointmentInput!): AppointmentDTO!
+  bookAppointmentForPatient(input: BookAppointmentInput!, patientId: String!): AppointmentDTO!
+}
+
+input NextOfKinInput {
+  firstName: String
+  lastName: String
+  phoneNumber: String
+  relationship: String
+  address: String
+}
+
+input UpdatePatientInput {
+  firstName: String
+  lastName: String
+  dob: DateTime
+  gender: String
+  identityNumber: String
+  streetAndNumber: String
+  twitter: String
+  facebook: String
+  instagram: String
+  image: String
+  lgaId: Int
+  nextOfKinId: String
+  stateId: Int
+}
+
+input ECardInput {
+  bloodGroup: String
+  genotype: String
+  weight: Float
+  height: Float
+  bpSystolic: Float
+  bpDiastolic: Float
+  nokName: String
+  nokNumber: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UpdateHospitalInput {
+  email: String
+  name: String
+  phoneNumber: String
+  image: String
+  registrationNumber: String
+  streetAndNumber: String
+  stateId: Float
+  lgaId: Float
+}
+
+input UpdateAfterVerificationArg {
+  name: String!
+  state: String!
+  lga: String!
+  ward: String!
+  facilityLevel: String!
+  ownership: String!
+}
+
+input UpdateDoctorInput {
+  firstName: String
+  lastName: String
+  email: String
+  streetAndNumber: String
+  status: String
+  twitter: String
+  facebook: String
+  registrationNumber: String
+  phoneNumber: String
+  title: String
+  instagram: String
+  image: String
+  lgaId: Int
+  stateId: Int
+  specialtyId: [ID!]
+}
+
+input CreateWalletLog {
+  trxId: String!
+  balanceBefore: Float!
+  balanceAfter: Float!
+  amount: Float!
+  remarks: String
+  walletLogTypeId: String!
+}
+
+input UpdateWalletLog {
+  balanceBefore: Float
+  balanceAfter: Float
+  amount: Float
+  remarks: String
+  walletLogTypeId: String
+}
+
+input UpdateSpecialtyInput {
+  specialtyId: ID!
+  name: String!
+}
+
+input UpdateTransactionInput {
+  extTrxRef: String
+  amount: Float
+  status: String
+}
+
+input CreateTransactionResult {
+  trxResultId: ID!
+  status: String!
+  trxRef: String!
+  flwRef: String!
+  amount: Float!
+  chargedAmount: Float!
+  currency: String!
+  processorResponse: String!
+  paymentType: String!
+  hospitalId: String!
+  hospitalName: String!
+  patientId: String!
+  patientName: String!
+  trxId: String!
+}
+
+input AppointmentInput {
+  time: DateTime!
+  price: Float!
+  payment: String!
+  appTypeId: String!
+  link: String
+  description: String
+  doctorId: String
+  patientId: String
+  status: String
+  doctorFinish: Boolean
+  patientFinish: Boolean
+  patientNotificationTime: DateTime
+  doctorNotificationTime: DateTime
+}
+
+input BookAppointmentInput {
+  appointmentId: ID!
+  description: String!
+}

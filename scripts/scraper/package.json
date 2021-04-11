@@ -1,0 +1,20 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "a simple web scraper to ge hospital data",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Uti",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.35",
+    "@types/puppeteer": "^5.4.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "puppeteer": "^8.0.0"
+  }
+}
