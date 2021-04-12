@@ -10,6 +10,7 @@ import { NextOfKinInput } from 'src/nextOfKins/dto/input/nok.input';
 import { Lga } from '../lgas/models/lga.model';
 import { State } from '../states/models/state.model';
 import { NextOfKin } from '../nextOfKins/models/kin.model';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class PatientsService {
@@ -19,16 +20,23 @@ export class PatientsService {
     @InjectModel(ECard)
     private eCardModel: typeof ECard,
     private readonly nextOfKinService: NextOfKinsService,
-  ) {}
+    private readonly notificationService: NotificationService,
+  ) {
+  }
 
   async createPatient(email: string): Promise<Patient> {
-    const patient = new Patient();
+    try {
+      const patient = new Patient();
 
-    patient.email = email;
+      patient.email = email;
 
-    await patient.save();
+      await patient.save();
 
-    return patient;
+      return patient;
+    }
+    catch(err){
+      console.log(err);
+    }
   }
 
   async getPatientByEmail(email: string): Promise<Patient> {
@@ -70,6 +78,10 @@ export class PatientsService {
         { model: NextOfKin },
       ],
     });
+
+    // if user is updating data for the first time, a welcome mail should be sent
+    let isFirstTime = !(patient.firstName && patient.lastName);
+
 
     if (!patient) {
       throw new NotFoundException('Patient not found');
@@ -158,6 +170,18 @@ export class PatientsService {
       newECard.patientId = patientId;
       await newECard.save();
     }
+
+    // send welcome email to the patient
+    if(isFirstTime){
+      await this.notificationService.sendNewPatient({
+        name: `${patient.firstName} ${patient.lastName}`,
+        to: patient.email
+      });
+    }
+    else {
+      // TODO - update successful email
+    }
+
 
     return patient;
   }

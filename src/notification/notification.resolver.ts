@@ -6,26 +6,26 @@ import { NotificationService } from './notification.service';
 export class NotificationResolver {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Mutation(() => EmailNotificationDTO, { name: 'JoinEmailList' })
-  async addToMailingList(
-    @Args('mailingList') mailingList: string,
-    @Args('userEmail') userEmail: string,
-    @Args('name') name: string,
-  ) {
-    return this.notificationService.addToMailingList(
-      mailingList,
-      userEmail,
-      name,
-    );
-  }
+  // @Mutation(() => EmailNotificationDTO, { name: 'JoinEmailList' })
+  // async addToMailingList(
+  //   @Args('mailingList') mailingList: string,
+  //   @Args('userEmail') userEmail: string,
+  //   @Args('name') name: string,
+  // ) {
+  //   return this.notificationService.addToMailingList(
+  //     mailingList,
+  //     userEmail,
+  //     name,
+  //   );
+  // }
 
-  @Mutation(() => EmailNotificationDTO, { name: 'ValidateEmail' })
-  async validateEmail(@Args('email') email: string) {
-    return this.notificationService.validateEmail(email);
-  }
+  // @Mutation(() => EmailNotificationDTO, { name: 'ValidateEmail' })
+  // async validateEmail(@Args('email') email: string) {
+  //   return this.notificationService.validateEmail(email);
+  // }
 
-  @Mutation(() => EmailNotificationDTO, { name: 'SendMailToUser' })
-  async sendMailToUser(email: string, subject: string, content: string) {
-    return this.notificationService.sendMailToUser(email, subject, content);
-  }
+  // @Mutation(() => EmailNotificationDTO, { name: 'SendMailToUser' })
+  // async sendMailToUser(email: string, subject: string, content: string) {
+  //   return this.notificationService.sendMailToUser(email, subject, content);
+  // }
 }

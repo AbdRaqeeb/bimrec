@@ -7,7 +7,4 @@ export class EmailNotificationDTO {
 
   @Field()
   success: boolean;
-
-  @Field({ nullable: true })
-  validatedEmail?: boolean;
 }

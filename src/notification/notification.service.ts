@@ -1,99 +1,101 @@
 import { Injectable } from '@nestjs/common';
-import * as mailgun from 'mailgun-js';
-
-const Mailgun = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
-});
-
-const companyEMail = process.env.COMPANY_MAIL;
+import * as sgMail from '@sendgrid/mail';
+import { omit, map } from 'lodash';
 
 type response = {
   success: boolean;
   message: string;
-  emailValidated?: boolean;
 };
+
+type emailSendInput = {
+  name: string;
+  to: string;
+}
+
+type messageInput = {
+  to: string[],
+  templateId: string,
+  dynamic_template_data: {
+    name?: string
+  }
+}
+
+const DOCTOR_WELCOME_EMAIL_TEMPLATE = process.env.DOCTOR_WELCOME_EMAIL
+const HOSPITAL_WELCOME_EMAIL_TEMPLATE = process.env.HOSPITAL_WELCOME_EMAIL
 
 @Injectable()
 export class NotificationService {
-  constructor() {}
+  constructor() {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  }
 
-  async addToMailingList(
-    mailingList: string,
-    email: string,
-    name: string,
-  ): Promise<response> {
-    const userData: mailgun.lists.MemberCreateData = {
-      address: email,
-      name: name,
-      subscribed: true,
-    };
-    try {
-      await Mailgun.lists(mailingList).members().create(userData);
-    } catch (err) {
-      console.log(err);
-      return {
-        success: false,
-        message: err.message,
-      };
-    }
+  /**
+   * Add extra fields to the message field before sending message
+   * @param messageFields message fields
+   */
+  private generateMessage(messageFields: messageInput) {
     return {
-      success: true,
-      message: 'Successfully added user to mailing list',
-    };
-  }
-
-  async validateEmail(email: string): Promise<response> {
-    try {
-      const body = await Mailgun.validate(email);
-      if (body && body.is_valid) {
-        return {
-          success: true,
-          message: 'email is valid',
-          emailValidated: true,
-        };
-      } else {
-        return {
-          success: true,
-          message: 'email is invalid',
-          emailValidated: false,
-        };
-      }
-    } catch (err) {
-      return {
-        success: false,
-        message: 'email validation failed',
-        emailValidated: true,
-      };
+      from: { email: process.env.FROM_EMAIL, name: 'LIVRITE' },
+      ...messageFields,
+      reply_to: { email: process.env.FROM_EMAIL, name: 'LIVRITE' },
+      personalizations: map(messageFields.to, (to) => ({ to: [{ email: to }] }))
     }
   }
 
-  async sendMailToMailingList(mailingList: string) {
-    // TODO
+  private async sendEmail(message): Promise<response> {
+    return new Promise((resolve, reject) => {
+      sgMail.send(message).then(() => {
+        if (process.env.NODE_ENV !== 'production') {
+          console.log("Email sent successfully");
+        }
+        resolve({
+          success: true,
+          message: "email successfully sent"
+        })
+      })
+        .catch((error) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log("Error while attempting to send Email")
+            console.log(error)
+          }
+          return reject({
+            success: false,
+            message: 'error while trying to send'
+          })
+        })
+    })
   }
 
-  async sendMailToUser(
-    email: string,
-    subject: string,
-    content: string,
-  ): Promise<response> {
-    const data: mailgun.messages.SendData = {
-      from: companyEMail,
-      to: email,
-      subject,
-      text: content,
-    };
-    try {
-      await Mailgun.messages().send(data);
-    } catch (err) {
-      return {
-        success: false,
-        message: err.message,
-      };
-    }
+  async sendNewPatient(data: emailSendInput): Promise<response> {
+    const message = this.generateMessage({
+      to: [data.to],
+      templateId: process.env.PATIENT_WELCOME_EMAIL,
+      dynamic_template_data: omit(data, ['to'])
+    })
+
+    console.log(message)
+
+    return this.sendEmail(message)
   }
 
-  async removeFromMailingList() {
-    // TODO
+  async sendNewDoctor(data: emailSendInput): Promise<response> {
+    const message = this.generateMessage({
+      to: [data.to],
+      templateId: process.env.DOCTOR_WELCOME_EMAIL,
+      dynamic_template_data: omit(data, ['to'])
+    })
+
+    return this.sendEmail(message)
   }
+
+  async sendNewHospital(data: emailSendInput): Promise<response> {
+    const message = this.generateMessage({
+      to: [data.to],
+      templateId: process.env.HOSPITAL_WELCOME_EMAIL,
+      dynamic_template_data: omit(data, ['to'])
+    })
+
+    return this.sendEmail(message)
+  }
+
 }

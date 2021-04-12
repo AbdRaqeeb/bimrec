@@ -1,0 +1,5 @@
+export const SENDGRID_API_KEY =process.env.SENDGRID_API_KEY;
+export const FROM_EMAIL= process.env.FROM_EMAIL;
+export const PATIENT_WELCOME_EMAIL_TEMPLATE = process.env.PATIENT_WELCOME_EMAIL ? process.env.PATIENT_WELCOME_EMAIL : "";
+export const HOSPITAL_WELCOME_EMAIL_TEMPLATE = process.env.HOSPITAL_WELCOME_EMAIL ? process.env.HOSPITAL_WELCOME_EMAIL: "";
+export const DOCTOR_WELCOME_EMAIL_TEMPLATE = process.env.DOCTOR_WELCOME_EMAIL ? process.env.DOCTOR_WELCOME_EMAIL : "";

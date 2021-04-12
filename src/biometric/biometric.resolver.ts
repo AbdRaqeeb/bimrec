@@ -5,6 +5,9 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import { CtxUser } from '../auth/decorators/ctx-user.decorator';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { BiometricResult } from './dto/biometric.dto';
 import { BiometricService } from './biometric.service';
@@ -19,11 +22,12 @@ export class FacialBiometricResolver {
     private readonly patientService: PatientsService,
   ) {}
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean, { name: 'uploadImage' })
   async uploadImage(
     @Args({ name: 'image', type: () => GraphQLUpload })
     { createReadStream, filename }: FileUpload,
-    @Args('patientId') patientId: string,
+    @CtxUser() { patientId }: PatientDTO
   ): Promise<boolean> {
     try {
       const imageIsValid = this.biometricService.uploadImage(
