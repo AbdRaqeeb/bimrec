@@ -41,6 +41,9 @@ module.exports = {
       identityNumber: {
         type: Sequelize.STRING,
       },
+      phoneNumber: {
+        type: Sequelize.STRING,
+      },
       identityType: {
         type: Sequelize.STRING,
       },

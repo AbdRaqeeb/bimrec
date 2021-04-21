@@ -21,6 +21,9 @@ export class UpdatePatientInput {
   streetAndNumber?: string;
 
   @Field({ nullable: true })
+  phoneNumber?: string;
+
+  @Field({ nullable: true })
   twitter?: string;
 
   @Field({ nullable: true })

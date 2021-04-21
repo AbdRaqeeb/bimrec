@@ -62,6 +62,9 @@ export class Patient extends Model<Patient> {
   facebook: string;
 
   @Column(DataType.STRING)
+  phoneNumber: string;
+
+  @Column(DataType.STRING)
   instagram: string;
 
   @IsUrl
