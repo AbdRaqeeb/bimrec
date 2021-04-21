@@ -31,6 +31,9 @@ export class PatientDTO {
   identityNumber?: string;
 
   @Field({ nullable: true })
+  phoneNumber: string;
+
+  @Field({ nullable: true })
   twitter?: string;
 
   @Field({ nullable: true })
