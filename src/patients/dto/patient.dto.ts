@@ -58,7 +58,7 @@ export class PatientDTO {
   lga?: LgaDTO;
 
   @Field(() => NextOfKinDTO, { nullable: true })
-  nok?: NextOfKinDTO;
+  kin?: NextOfKinDTO;
 
   @Field(() => StateDTO, { nullable: true })
   state?: StateDTO;

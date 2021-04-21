@@ -18,6 +18,9 @@ export class NextOfKinDTO {
   @Field()
   relationship: string;
 
+  @Field()
+  address: string;
+
   @Field(() => PatientDTO)
   patient: PatientDTO;
 }
